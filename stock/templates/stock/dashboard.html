@@ -1,0 +1,96 @@
+{% extends 'stock/base.html' %}
+
+{% block content %}
+<h2 class="mb-4">📊 Tableau de bord</h2>
+
+<div class="row text-center">
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5>Produits</h5>
+                <h2>{{ total_produits }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5>Stock total</h5>
+                <h2>{{ stock_total }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body text-danger">
+                <h5>Stock faible</h5>
+                <h2>{{ produits_faible.count }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<h4>🔄 Derniers mouvements</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Produit</th>
+            
+            <th>Quantité</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for m in derniers_mouvements %}
+        <tr>
+            <td>{{ m.produit.nom }}</td>
+            
+            <td>{{ m.quantite }}</td>
+            <td>{{ m.date|date:"d/m/Y H:i" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">Aucun mouvement</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<hr>
+
+
+
+<!-- Données JSON sécurisées -->
+{{ noms|json_script:"labels-data" }}
+{{ quantites|json_script:"quantites-data" }}
+
+<canvas id="stockChart"></canvas>
+
+<script>
+const labels = JSON.parse(
+    document.getElementById('labels-data').textContent
+);
+
+const quantites = JSON.parse(
+    document.getElementById('quantites-data').textContent
+);
+
+const ctx = document.getElementById('stockChart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Quantité en stock',
+            data: quantites,
+        }]
+    }
+});
+</script>
+
+{% endblock %}

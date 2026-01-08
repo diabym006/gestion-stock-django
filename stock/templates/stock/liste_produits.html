@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des produits</title>
+    <style>
+        table {
+            width: 70%;
+            margin: auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+        h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+{% extends 'stock/base.html' %}
+
+{% block title %}Produits{% endblock %}
+
+{% block content %}
+<form method="get" class="mb-3">
+    <div class="input-group">
+        <input
+            type="text"
+            name="q"
+            class="form-control"
+            placeholder="🔍 Rechercher un produit..."
+            value="{{ query }}"
+        >
+        <button class="btn btn-primary" type="submit">
+            Rechercher
+        </button>
+    </div>
+</form>
+{% if query and produits.count == 0 %}
+<div class="alert alert-warning">
+    Aucun produit trouvé pour "<strong>{{ query }}</strong>"
+</div>
+{% endif %}
+<a href="{% url 'liste_produits' %}" class="btn btn-secondary mt-2">
+    Réinitialiser
+</a>
+
+<h3>Liste des produits</h3>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Nom</th>
+            <th>Catégorie</th>
+            <th>Prix</th>
+            <th>Quantité</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for produit in produits %}
+        <tr>
+            <td>{{ produit.nom }}</td>
+            <td>{{ produit.categorie.nom }}</td>
+            <td>{{ produit.prix }}</td>
+            <td>{{ produit.quantite }}</td>
+            <td>
+                <a class="btn btn-warning btn-sm" href="{% url 'modifier_produit' produit.id %}">✏️</a>
+                <a class="btn btn-danger btn-sm" href="{% url 'supprimer_produit' produit.id %}">🗑️</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">Aucun produit</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Modifier produit</title>
+</head>
+<body>
+
+<h2>✏️ Modifier le produit</h2>
+
+{% extends 'stock/base.html' %}
+{% block content %}
+<form method="post" class="card card-body">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary">Enregistrer</button>
+</form>
+{% endblock %}
+
+
+<br>
+<a href="{% url 'liste_produits' %}">⬅ Retour</a>
+
+</body>
+</html>

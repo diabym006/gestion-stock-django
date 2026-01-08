@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Supprimer produit</title>
+</head>
+<body>
+
+<h2>🗑️ Supprimer le produit</h2>
+
+<p>Voulez-vous vraiment supprimer <strong>{{ produit.nom }}</strong> ?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Oui, supprimer</button>
+</form>
+
+<br>
+<a href="{% url 'liste_produits' %}">❌ Annuler</a>
+
+</body>
+</html>
